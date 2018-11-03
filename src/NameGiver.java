@@ -1,14 +1,19 @@
 import java.io.IOException;
 
-import javax.xml.ws.spi.http.HttpExchange;
-import javax.xml.ws.spi.http.HttpHandler;
 
-public class NameGiver extends HttpHandler {
+import com.sun.net.httpserver.*;
 
+public class NameGiver implements HttpHandler {
+
+	Launcher master;
+	
+	public NameGiver(Launcher master){
+		this.master = master;
+	}
+	
 	@Override
 	public void handle(HttpExchange arg0) throws IOException {
-		// TODO Auto-generated method stub
-
+		arg0.sendResponseHeaders(master.nextPlayer(), -1);
 	}
 
 }

@@ -3,7 +3,7 @@ import java.io.*;
 import java.net.Socket;
 
 public class PlayerConnection extends Thread {
-
+/*
 	Launcher master;
 	Tile team;
 	Socket client;
@@ -41,4 +41,5 @@ public class PlayerConnection extends Thread {
 		String jSONFile = JSONWriter.makeJSONString(gridState);
 		out.println(jSONFile);
 	}
+*/
 }
