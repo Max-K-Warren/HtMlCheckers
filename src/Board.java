@@ -1,5 +1,4 @@
-
-
+import java.awt.Point;
 
 public class Board {
 	private Tile[][] board;
@@ -10,7 +9,7 @@ public class Board {
 	private int white_pieces;
 	
 	public Board() {
-		
+		init();
 	}
 	
 	public void init() {
@@ -38,7 +37,7 @@ public class Board {
 	}
 	
 	// checks for winner based on whose turn it is. Black can't win on white's turn
-	public boolean check_loss(Turn turn) {
+	private boolean check_loss(Turn turn) {
 		if (turn == Turn.BLACK) {
 			return (white_pieces == 0);
 		} else {
@@ -47,7 +46,7 @@ public class Board {
 	}
 	
 	// convert board into 2d int array
-	public int[][] int_board() {
+	private int[][] int_board() {
 		int[][] temp_board = new int[SIZE][SIZE];
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
@@ -63,14 +62,12 @@ public class Board {
 		}
 		
 		// prints int board. not needed
-		print (temp_board);
 		return temp_board;
 		
 	}
 	
 	// selects playable pieces. add 10 to all playable pieces.
-	public void genPlayablePieces() {
-		int[][] matrix = int_board();
+	private int[][] genPlayablePieces(int[][] matrix) {
 		if (turn == Turn.BLACK) {
 			for (int i = 0; i < 8; i++) {
 				for (int j = 0; j < 8; j++) {
@@ -132,7 +129,6 @@ public class Board {
 								if (i+2<SIZE && j-2<0 && board[i+2][j-2]==Tile.EMPTY) playable = true;
 							}
 						}
-						
 					}
 					if (board[i][j] == Tile.WHITECROWN) {
 						//check behind
@@ -154,13 +150,13 @@ public class Board {
 				}
 			}
 		}
-		print (matrix);
+		return matrix;
 	}
 	
 	//given a piece. show how it can move. It can make at least 1 move.
 	
 	// print int board given to it
-	public void print (int[][] temp_board) {
+	private void print (int[][] temp_board) {
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
 				System.out.print(temp_board[i][j] + " ");
@@ -170,12 +166,193 @@ public class Board {
 	}
 	
 	// print board
-	public void print() {
+	private void print() {
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
 				System.out.print(board[i][j] + " ");
 			}
 			System.out.println();
 		}
+	}
+	
+	
+	// takes point being clicked.
+	public void clicked(Point p) {
+		
+	}
+
+	// returns integer grid
+	public int[][] get_int_grid() {
+		return int_board();
+	}
+	
+	public int[][] unhilight(int[][]matrix) {
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++) {
+				matrix[i][j] = matrix[i][j]%10;
+			}
+		}
+		return matrix;
+	}
+	
+	private int[][] generate_possible_moves(int[][] matrix, Point p) {
+		boolean jump = false;
+		matrix[p.x][p.y] += 10; //highlights the black piece selected
+		if (turn == Turn.BLACK) {
+			if (p.x > 1) {
+				if (p.y > 1) {
+					if (board[p.x-1][p.y-1] == Tile.WHITE || board[p.x-1][p.y-1] == Tile.WHITECROWN) {
+						if (board[p.x-2][p.y-2] == Tile.EMPTY) {
+							matrix[p.x-2][p.y-2] += 10;
+							jump = true;
+						}	
+					}
+				}
+				if (p.y < 6) {
+					if (board[p.x-1][p.y+1] == Tile.WHITE || board[p.x-1][p.y+1] == Tile.WHITECROWN) {
+						if (board[p.x-2][p.y+2] == Tile.EMPTY) {
+							matrix[p.x-2][p.y+2] += 10;
+							jump = true;
+						}
+					}	
+				}
+			}
+			if (board[p.x][p.y] == Tile.BLACKCROWN) {
+				if (p.x < 6) {
+					if (p.y > 1) {
+						if (board[p.x+1][p.y+1] == Tile.WHITE || board[p.x+1][p.y-1] == Tile.WHITECROWN) {
+							if (board[p.x+2][p.y-2] == Tile.EMPTY) {
+								matrix[p.x+2][p.y-2] += 10;
+								jump = true;
+							}
+						}
+					}
+					
+					if (p.y < 6) {
+						if (board[p.x+1][p.y+1] == Tile.WHITE || board[p.x+1][p.y+1] == Tile.WHITECROWN) {
+							if (board[p.x+2][p.y+2] == Tile.EMPTY) {
+								matrix[p.x+2][p.y+2] += 10;
+								jump = true;
+							}
+						}	
+					}
+					
+				}
+			}
+			
+			if (!jump) {
+				if (p.x > 0) {
+					if (p.y > 0) {
+						if (board[p.x-1][p.y-1] == Tile.EMPTY) {
+							matrix[p.x-1][p.y-1] += 10;
+						}
+					}
+					if (p.y < 6) {
+						if (board[p.x-1][p.y+1] == Tile.EMPTY) {
+							matrix[p.x-1][p.y+1] += 10;
+						}
+					}
+				}
+				if (board[p.x][p.y] == Tile.BLACKCROWN) {
+					if (p.x < 7) {
+						if (p.y > 0) {
+							if (board[p.x+1][p.y-1] == Tile.EMPTY) {
+								matrix[p.x+1][p.y-1] += 10;
+							}
+						}
+						if (p.y < 6) {
+							if (board[p.x+1][p.y+1] == Tile.EMPTY) {
+								matrix[p.x+1][p.y+1] += 10;
+							}
+						}
+					}
+				}
+			}
+			
+		} else {
+			if (p.x < 6) {
+				if (p.y > 1) {
+					if (board[p.x+1][p.y-1] == Tile.BLACK || board[p.x+1][p.y-1] == Tile.BLACKCROWN) {
+						if (board[p.x+2][p.y-2] == Tile.EMPTY) {
+							matrix[p.x+2][p.y-2] += 10;
+							jump = true;
+						}	
+					}
+				}
+				if (p.y < 6) {
+					if (board[p.x+1][p.y+1] == Tile.BLACK || board[p.x+1][p.y+1] == Tile.BLACKCROWN) {
+						if (board[p.x+2][p.y+2] == Tile.EMPTY) {
+							matrix[p.x+2][p.y+2] += 10;
+							jump = true;
+						}
+					}	
+				}
+			}
+			if (board[p.x][p.y] == Tile.WHITECROWN) {
+				if (p.x > 1) {
+					if (p.y > 1) {
+						if (board[p.x-1][p.y+1] == Tile.BLACK || board[p.x-1][p.y-1] == Tile.BLACKCROWN) {
+							if (board[p.x-2][p.y-2] == Tile.EMPTY) {
+								matrix[p.x-2][p.y-2] += 10;
+								jump = true;
+							}
+						}
+					}
+					
+					if (p.y < 6) {
+						if (board[p.x-1][p.y+1] == Tile.BLACK || board[p.x-1][p.y+1] == Tile.BLACKCROWN) {
+							if (board[p.x-2][p.y+2] == Tile.EMPTY) {
+								matrix[p.x-2][p.y+2] += 10;
+								jump = true;
+							}
+						}	
+					}
+					
+				}
+			}
+			
+			if (!jump) {
+				if (p.x < 7) {
+					if (p.y > 0) {
+						if (board[p.x+1][p.y-1] == Tile.EMPTY) {
+							matrix[p.x+1][p.y-1] += 10;
+						}
+					}
+					if (p.y < 6) {
+						if (board[p.x+1][p.y+1] == Tile.EMPTY) {
+							matrix[p.x+1][p.y+1] += 10;
+						}
+					}
+				}
+				if (board[p.x][p.y] == Tile.WHITECROWN) {
+					if (p.x > 0) {
+						if (p.y > 0) {
+							if (board[p.x-1][p.y-1] == Tile.EMPTY) {
+								matrix[p.x-1][p.y-1] += 10;
+							}
+						}
+						if (p.y < 6) {
+							if (board[p.x-1][p.y+1] == Tile.EMPTY) {
+								matrix[p.x-1][p.y+1] += 10;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return matrix;
+	}
+	
+	public void play() {
+		int[][] matrix = int_board();
+		matrix = genPlayablePieces(matrix);
+		//send to Max
+		//Get point back
+		Point p = new Point(5,3); // 5 down then 3 along
+		matrix = unhilight(matrix);
+		matrix = generate_possible_moves(matrix, p);
+		print (matrix);
+		System.out.println();
 	}
 }
