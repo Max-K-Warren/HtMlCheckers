@@ -11,7 +11,6 @@ public class Launcher {
 		System.out.println("Hello, World!");
 		Launcher me = new Launcher();
 		me.go();
-		//board.print();
 	}
 	
 	public void go() {
@@ -22,7 +21,7 @@ public class Launcher {
 			Socket pOneSocket = jSConnection.accept();
 			Socket pTwoSocket = jSConnection.accept();
 			readerOne = new PlayerConnection(pOneSocket, this, Tile.BLACK);
-			readerTwo = new PlayerConnection(pOneSocket, this, Tile.WHITE);
+			readerTwo = new PlayerConnection(pTwoSocket, this, Tile.WHITE);
 			this.updateData();
 			readerOne.start();
 			readerTwo.start();
@@ -34,12 +33,21 @@ public class Launcher {
 	}
 	
 	public void updateData() {
-		//readerOne.send(board.getplayershow());
+		/*readerOne.send(board.getplayershow());
 		//readerTwo.send(board.getplayershow());
+		if(board.isOver()){
+			this.kill();
+		}
+		*/
 	}
 
 	public void clicked(String maybe, Tile initiator) {
 		//Board.input
 		this.updateData();
+	}
+	
+	private void kill() {
+		readerOne.interrupt();
+		readerTwo.interrupt();
 	}
 }
