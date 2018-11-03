@@ -27,8 +27,18 @@ public class PlayerConnection extends Thread {
 			return;
 		}
 		while (true) {
-			in.readLine()
-			
+			try {
+				String maybe = in.readLine();
+				master.clicked(maybe, this.team);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+	}
+	
+	public void send(int[][] gridState) {
+		String jSONFile = JSONWriter.makeJSONString(gridState);
+		out.println(jSONFile);
 	}
 }

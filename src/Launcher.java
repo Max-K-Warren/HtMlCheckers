@@ -31,6 +31,12 @@ public class Launcher {
 	}
 	
 	public void updateData() {
-		
+		//readerOne.send(board.getplayershow());
+		//readerTwo.send(board.getplayershow());
+	}
+
+	public void clicked(String maybe, Tile initiator) {
+		//Tells board about move
+		this.updateData();
 	}
 }
