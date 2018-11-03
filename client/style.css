@@ -2,18 +2,38 @@ html, body{
   width:100%;
   height:100%;
   margin:0;
+  background-color:#EEEEEE;
 }
-#board{
+#game-board-container{
+  width:100vw;
+  height:100vw;
+  max-height:100vh;
+  max-width:100vh;
+  margin:auto;
+  vertical-align:middle;
+  box-shadow: 3px 3px 15px #999;
+}
 
+#game-board{
+  width:calc(100%);
+  height:100%;
+  color:#CCC;
 }
 .boardSquare{
-  height:calc(100%/8);
-  width:calc(100%/8);
+  width:12.5%;
+  height:12.5%;
   display:inline-block;
+  position:relative;
 }
 .col0{
   background-color:#FFFFFF;
 }
 .col1{
-    background-color:#000000;
+  background-color:#000000;
+}
+.entityIcon{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
 }
