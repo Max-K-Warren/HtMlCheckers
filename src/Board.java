@@ -66,8 +66,139 @@ public class Board {
 		
 	}
 	
-	// selects playable pieces. add 10 to all playable pieces.
+	
+	
+	private boolean checkForwardLeft(int i, int j) {
+		boolean playable = false;
+		if (i-1 >= 0 && j-1 >= 0) {
+			if (board[i-1][j-1] == Tile.EMPTY) playable = true;
+		}
+		return playable;
+	}
+	
+	private boolean checkForwardRight(int i, int j) {
+		boolean playable = false;
+		if (i-1 >= 0 && j+1 < SIZE) {
+			if (board[i-1][j+1] == Tile.EMPTY) playable = true;
+		}
+		return playable;
+	}
+	private boolean checkBackwardLeft(int i, int j) {
+		boolean playable = false;
+		if (i+1 < SIZE && j-1 >= 0) {
+			if (board[i+1][j-1] == Tile.EMPTY) playable = true;
+		}
+		return playable;
+	}
+	private boolean checkBackwardRight(int i, int j) {
+		boolean playable = false;
+		if (i+1 < SIZE && j+1 < SIZE) {
+			if (board[i+1][j+1] == Tile.EMPTY) playable = true;
+		}
+		return playable;
+	}
+	private boolean checkJumpForwardLeft(int i, int j) {
+		boolean playable = false;
+		if (i-2 >= 0 && j-2 >= 0) {
+			if (turn == Turn.BLACK) {
+				if ((board[i-1][j-1] == Tile.WHITE || board[i-1][j-1] == Tile.WHITECROWN) && board[i-2][j-2] == Tile.EMPTY) playable = true;
+			}
+			else if ((board[i-1][j-1] == Tile.BLACK || board[i-1][j-1] == Tile.BLACKCROWN) && board[i-2][j-2] == Tile.EMPTY) playable = true;
+		}
+		return playable;
+	}
+	
+	private boolean checkJumpForwardRight(int i, int j) {
+		boolean playable = false;
+		if (i-2 >= 0 && j+2 < SIZE) {
+			if (turn == Turn.BLACK) {
+				if ((board[i-1][j+1] == Tile.WHITE || board[i-1][j-1] == Tile.WHITECROWN) && board[i-2][j+2] == Tile.EMPTY) playable = true;
+			}
+			else if ((board[i-1][j+1] == Tile.BLACK || board[i-1][j-1] == Tile.BLACKCROWN) && board[i-2][j+2] == Tile.EMPTY) playable = true;
+		}
+		return playable;
+	}
+	private boolean checkJumpBackwardLeft(int i, int j) {
+		boolean playable = false;
+		if (i+2 < SIZE && j-2 >= 0) {
+			if (turn == Turn.BLACK) {
+				if ((board[i+1][j-1] == Tile.WHITE || board[i+1][j-1] == Tile.WHITECROWN) && board[i+2][j-2] == Tile.EMPTY) playable = true;
+			}
+			else if ((board[i+1][j-1] == Tile.BLACK || board[i+1][j-1] == Tile.BLACKCROWN) && board[i+2][j-2] == Tile.EMPTY) playable = true;
+		}
+		return playable;
+	}
+	private boolean checkJumpBackwardRight(int i, int j) {
+		boolean playable = false;
+		if (i+2 < SIZE && j+2 < SIZE) {
+			if (turn == Turn.BLACK) {
+				if ((board[i+1][j+1] == Tile.WHITE || board[i+1][j+1] == Tile.WHITECROWN) && board[i+2][j+2] == Tile.EMPTY) playable = true;
+			}
+			else if ((board[i+1][j+1] == Tile.BLACK || board[i+1][j+1] == Tile.BLACKCROWN) && board[i+2][j+2] == Tile.EMPTY) playable = true;
+		}
+		return playable;
+	}
+	
+	
+	// selects playable pieces. add 10 to all playable pieces
 	private int[][] genPlayablePieces(int[][] matrix) {
+		if (turn == Turn.BLACK) {
+			for (int i = 0; i < SIZE; i++) {
+				for (int j = 0; j < SIZE; j++) {
+					boolean playable = false;
+					if (
+							checkForwardLeft(i, j) || 
+							checkForwardRight(i, j) ||
+							checkJumpForwardLeft(i, j) ||
+							checkJumpForwardRight(i, j)
+							) 
+						playable = true;
+					if (board[i][j] == Tile.BLACKCROWN) {
+						if (
+								checkBackwardLeft(i, j) || 
+								checkBackwardRight(i, j) ||
+								checkJumpBackwardLeft(i, j) ||
+								checkJumpBackwardRight(i, j)
+								) 
+							playable = true;
+					}
+					if (playable) matrix[i][j] = matrix[i][j] + 10;
+				}
+			}
+		}
+		
+		else { //is white
+			for (int i = 0; i < SIZE; i++) {
+				for (int j = 0; j < SIZE; j++) {
+					boolean playable = false;
+					if (
+							checkBackwardLeft(i, j) || 
+							checkBackwardRight(i, j) ||
+							checkJumpBackwardLeft(i, j) ||
+							checkJumpBackwardRight(i, j)
+							) 
+						playable = true;
+					if (board[i][j] == Tile.WHITECROWN) {
+						if (
+								checkForwardLeft(i, j) || 
+								checkForwardRight(i, j) ||
+								checkJumpForwardLeft(i, j) ||
+								checkJumpForwardRight(i, j)
+								) 
+							playable = true;
+					}
+					if (playable) matrix[i][j] = matrix[i][j] + 10;
+				}
+			}
+		}
+		return matrix;
+	}
+	
+	
+	
+	
+	// selects playable pieces. add 10 to all playable pieces --> long version.
+	private int[][] genPlayablePiecesLong(int[][] matrix) {
 		if (turn == Turn.BLACK) {
 			for (int i = 0; i < 8; i++) {
 				for (int j = 0; j < 8; j++) {
