@@ -344,15 +344,51 @@ public class Board {
 		return matrix;
 	}
 	
+	// make swap and remove taken pieces
+	private boolean make_move(int[][] matrix, Point p, Point q) {
+		matrix[q.x][q.y] = matrix[p.x][p.y];
+		board[q.x][q.y] = board[p.x][p.y];
+		matrix[p.x][p.y] = 1;
+		board[p.x][p.y] = Tile.EMPTY;
+		
+		if (Math.abs(p.x - q.x) == 2) {
+			if (board[(p.x+q.x)/2][(p.y+q.y)/2] == Tile.BLACK || board[(p.x+q.x)/2][(p.y+q.y)/2] == Tile.BLACKCROWN) {
+				black_pieces--;
+			} else {
+				white_pieces--;
+			}
+			board[(p.x+q.x)/2][(p.y+q.y)/2] = Tile.EMPTY;
+			matrix[(p.x+q.x)/2][(p.y+q.y)/2] = 1;
+		}
+		if (Math.abs(p.x - q.x) == 2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public void play() {
+		boolean another_move = true;
 		int[][] matrix = int_board();
 		matrix = genPlayablePieces(matrix);
 		//send to Max
 		//Get point back
-		Point p = new Point(5,3); // 5 down then 3 along
-		matrix = unhilight(matrix);
-		matrix = generate_possible_moves(matrix, p);
-		print (matrix);
-		System.out.println();
+		while (another_move) {
+			Point p = new Point(5,3); // 5 down then 3 along
+			matrix = unhilight(matrix);
+			matrix = generate_possible_moves(matrix, p);
+			print (matrix);
+			System.out.println();
+			Point q = new Point(4,2);
+			another_move = make_move(matrix, p, q);
+			matrix = unhilight(matrix);
+			matrix = genPlayablePieces(matrix);
+			if (matrix[q.x][q.y] > 9) { // allows a single move
+				another_move = false;
+		}
+		print();
+		}
+		
+		
 	}
 }
