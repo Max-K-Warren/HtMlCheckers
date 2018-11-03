@@ -1,0 +1,19 @@
+html, body{
+  width:100%;
+  height:100%;
+  margin:0;
+}
+#board{
+
+}
+.boardSquare{
+  height:calc(100%/8);
+  width:calc(100%/8);
+  display:inline-block;
+}
+.col0{
+  background-color:#FFFFFF;
+}
+.col1{
+    background-color:#000000;
+}
