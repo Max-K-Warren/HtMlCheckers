@@ -14,11 +14,7 @@ public class PlayerConnection extends Thread {
 		this.master = master;
 		this.team = team;
 		this.client = player;
-	}
-	
-	@Override
-	public void run() {
-		 try {
+		try {
 			out = new PrintStream(client.getOutputStream(), true);
 			in = new BufferedReader( new InputStreamReader(client.getInputStream()));
 		} catch (IOException e) {
@@ -26,6 +22,10 @@ public class PlayerConnection extends Thread {
 			e.printStackTrace();
 			return;
 		}
+	}
+	
+	@Override
+	public void run() {
 		while (true) {
 			try {
 				String maybe = in.readLine();

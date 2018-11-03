@@ -22,7 +22,10 @@ public class Launcher {
 			Socket pOneSocket = jSConnection.accept();
 			Socket pTwoSocket = jSConnection.accept();
 			readerOne = new PlayerConnection(pOneSocket, this, Tile.BLACK);
-			readerOne = new PlayerConnection(pOneSocket, this, Tile.WHITE);
+			readerTwo = new PlayerConnection(pOneSocket, this, Tile.WHITE);
+			this.updateData();
+			readerOne.start();
+			readerTwo.start();
 		} catch (IOException e) {
 			System.out.println("Error opening socket + setup");
 			e.printStackTrace();
@@ -36,7 +39,7 @@ public class Launcher {
 	}
 
 	public void clicked(String maybe, Tile initiator) {
-		//Tells board about move
+		//Board.input
 		this.updateData();
 	}
 }
