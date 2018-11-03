@@ -3,11 +3,26 @@ html, body{
   height:100%;
   margin:0;
   background-color:#EEEEEE;
+  font-family: "Arial", sans-serif;
+}
+#header{
+  width:100%;
+  height:10vh;
+}
+#innerHead{
+    background-color: #FFFFFF;
+    vertical-align: middle;
+    margin-bottom:10px;
+}
+#display{
+  font-size:120%;
+  margin:auto;
+  display: inline-block;
 }
 #game-board-container{
   width:100vw;
   height:100vw;
-  max-height:100vh;
+  max-height:90vh;
   max-width:100vh;
   margin:auto;
   vertical-align:middle;
@@ -36,4 +51,16 @@ html, body{
   top:0;
   left:0;
   width:100%;
+}
+.button{
+  color:#FFFFFF;
+  background-color:#000000;
+  padding:10px;
+  border-radius: 5px;
+  display:inline-block;
+  cursor:pointer;
+  position: relative;
+}
+.button:active{
+  top:3px;
 }
