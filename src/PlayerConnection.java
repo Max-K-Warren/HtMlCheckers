@@ -5,6 +5,6 @@ public class PlayerConnection extends Thread {
 	Tile team;
 	
 	public PlayerConnection(Launcher master, Tile player) {
-		this.master = master
+		this.master = master;
 	}
 }
