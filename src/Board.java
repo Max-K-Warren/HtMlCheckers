@@ -498,6 +498,21 @@ public class Board {
 		}
 	}
 	
+	public void playNew() {
+		boolean gameWon = false;
+		while (!gameWon) {
+			int[][] matrix = genPlayablePieces(int_board());
+			//send matrix
+			Point sourcePoint = new Point(5, 3); //change this when possible to recieve point from client
+			matrix = unhilight(matrix);
+			matrix = generate_possible_moves(matrix, sourcePoint);
+			print(matrix);
+			System.out.println();
+			Point goalPoint = new Point(4,2); //change this when poss to receive point from client
+			//panic
+		} 
+	}
+	
 	public void play() {
 		boolean another_move = true;
 		int[][] matrix = int_board();
