@@ -1,6 +1,8 @@
-url = "./sample.json";
+url = "http://localhost:8080/getData/";
+name;
 function init(){
   generateBoard();
+  getName("http://localhost:8080/getName/");
   getJson(url)
   pollServerLoop = window.setInterval(getJson(url), 3000);
 }
@@ -37,7 +39,7 @@ function placeItem(item,x,y){
   //       0_ unhighlighted
   //       1_ possible move indicator
   if(item>=10){
-    highlighted = '<img class="entityIcon" style="cursor:pointer;" onclick="clickedSquare(x,y)" src="./highlight.png">';
+    highlighted = '<img class="entityIcon" style="cursor:pointer;" onclick="clickedSquare('+x+','+y+')" src="./highlight.png">';
   }else{
     highlighted = '';
   }
@@ -98,6 +100,51 @@ function getJson(url){
   req.send();
 
 }
+
+function getName(url){
+  //Makes request to server for json and then parses json into object, returning that
+  const req = new XMLHttpRequest();
+  req.onreadystatechange = function() {
+      /*const json = (function(raw) {
+        console.log(raw);
+          try {
+              return JSON.parse(raw);
+          } catch (err) {
+              return false;
+          }
+      })(req.response);*/
+      name = req.response;
+	  console.log('name:' +name)
+
+  };
+  req.open("GET", url, true);
+  req.responseType = 'json';
+  req.send();
+
+}
+
 function clickedSquare(x,y){
-  console.log(x+','+y);
+  sendMove("http://localhost:8080/sendData/", x, y)
+  
+}
+
+function sendMove(url, x , y){
+  //Makes request to server for json and then parses json into object, returning that
+  const req = new XMLHttpRequest();
+  req.onreadystatechange = function() {
+		if (req.status == 404) {
+          console.log("404");
+          return false;
+      }
+
+      if (!(req.readyState == 4 && req.status == 200))
+          return false;
+      else {
+		req.send(name+','+x+','+y)
+      }
+
+  };
+  req.open("PUT", url, true);
+  console.log(name+','+x+','+y);
+  req.send();
 }

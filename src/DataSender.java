@@ -19,9 +19,12 @@ public class DataSender implements HttpHandler{
         InputStreamReader isr = new InputStreamReader(arg0.getRequestBody(), "utf-8");
         BufferedReader br = new BufferedReader(isr);
         String playerName = br.readLine();
+        System.out.println(playerName);
 
         // send response
         String response = master.getGrid(playerName);
+        Headers heads = arg0.getResponseHeaders();
+        heads.add("Access-Control-Allow-Origin", "*");
         arg0.sendResponseHeaders(200, response.length());
         OutputStream os = arg0.getResponseBody();
         os.write(response.toString().getBytes());

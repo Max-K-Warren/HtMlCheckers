@@ -2,7 +2,7 @@
 public class JSONWriter {
 
 	public static String makeJSONString (int[][] gridState) {
-		String writeJSON = "[";
+		String writeJSON = "{ \"board\":[";
 		for(int[] i: gridState) {
 			writeJSON += ("[");
 			for(int j: i) {
@@ -12,7 +12,7 @@ public class JSONWriter {
 			writeJSON += "],";
 		}
 		writeJSON = writeJSON.substring(0, writeJSON.length()-1);
-		writeJSON += "]";
+		writeJSON += "] }";
 		return writeJSON;
 		/*int x = 0;
 		int y = 0;
