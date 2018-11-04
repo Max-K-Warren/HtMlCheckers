@@ -600,7 +600,7 @@ public class Board {
 			print (matrix);
 			System.out.println();
 			Point q = new Point(4,2);
-			another_move = make_move(matrix, p, q);
+			//another_move = make_move(matrix, p, q);
 			matrix = unhilight(matrix);
 			matrix = genPlayablePieces(matrix);
 			if (matrix[q.x][q.y] > 9) { // allows a single move
