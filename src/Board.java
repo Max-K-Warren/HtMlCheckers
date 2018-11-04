@@ -475,8 +475,75 @@ public class Board {
 		return matrix;
 	}
 	
+	private boolean isJump(Point souce, Point goal) {
+		//returns true if move 'jumps' over an opposing piece to take it
+		if (Math.abs(souce.x - goal.x) == 2) return true;
+		else return false;
+	}
+	
+	private boolean canJumpAgain(Point source, Point goal) {
+		boolean jumpAgain = false;
+		if (turn == Turn.BLACK) {
+			if (board[source.x][source.y] == Tile.BLACKCROWN || board[source.x][source.y] == Tile.WHITECROWN) {
+				jumpAgain = (
+						checkJumpForwardLeft(goal.x, goal.y) ||
+						checkJumpForwardRight(goal.x, goal.y) ||
+						checkJumpBackwardLeft(goal.x, goal.y) ||
+						checkJumpBackwardRight(goal.x, goal.y));
+			}
+			if (board[source.x][source.y] == Tile.BLACK) {
+				jumpAgain = (
+						checkJumpForwardLeft(goal.x, goal.y) ||
+						checkJumpForwardRight(goal.x, goal.y)
+				);
+			}
+			if (board[source.x][source.y] == Tile.WHITE) {
+				jumpAgain = (
+						checkJumpBackwardLeft(goal.x, goal.y) ||
+						checkJumpBackwardRight(goal.x, goal.y)
+				);
+			}
+		}
+		return jumpAgain;
+	}
+	
+	private void switchPlayers() {
+		if (turn == Turn.BLACK) turn = Turn.WHITE;
+		else turn = Turn.BLACK;
+		
+	}
+	
+	private void deductNonPlayerTally() {
+		if (turn == Turn.WHITE) black_pieces--;
+		else white_pieces--;
+	}
+	
+	private Point getSkipped(Point goal, Point source) {
+		int i = source.x + ((goal.x - source.x)/2);
+		int j = source.y + ((goal.y - source.y)/2);
+		return new Point(i, j);
+	}
+	
+	private int[][] make_move(int[][] matrix, Point source, Point goal) {
+		board[goal.x][goal.y] = board[source.x][source.y];
+		matrix[goal.x][goal.y] = matrix[source.x][source.y];
+		board[source.x][source.y] = Tile.EMPTY;
+		matrix[source.x][source.y] = 1;
+		if (isJump(source, goal)) {
+			Point skipped = getSkipped(goal, source);
+			board[skipped.x][skipped.y] = Tile.EMPTY;
+			matrix[skipped.x][skipped.y] = 1;
+			deductNonPlayerTally();
+			if (canJumpAgain(source, goal)) {
+				return matrix;
+			}
+		}
+		switchPlayers();
+		return matrix;
+	}
+	
 	// make swap and remove taken pieces
-	private boolean make_move(int[][] matrix, Point p, Point q) {
+	private boolean make_move_old(int[][] matrix, Point p, Point q) {
 		matrix[q.x][q.y] = matrix[p.x][p.y];
 		board[q.x][q.y] = board[p.x][p.y];
 		matrix[p.x][p.y] = 1;
@@ -498,7 +565,12 @@ public class Board {
 		}
 	}
 	
-	public void playNew() {
+	private boolean checkWinCondition() {
+		if (black_pieces == 0 || white_pieces == 0) return true;
+		else return false;
+	}
+	
+	public void play() {
 		boolean gameWon = false;
 		while (!gameWon) {
 			int[][] matrix = genPlayablePieces(int_board());
@@ -509,11 +581,13 @@ public class Board {
 			print(matrix);
 			System.out.println();
 			Point goalPoint = new Point(4,2); //change this when poss to receive point from client
+			matrix = make_move(matrix, sourcePoint, goalPoint);
+			gameWon = checkWinCondition();
 			//panic
 		} 
 	}
 	
-	public void play() {
+	public void playOld() {
 		boolean another_move = true;
 		int[][] matrix = int_board();
 		matrix = genPlayablePieces(matrix);
