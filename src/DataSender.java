@@ -25,7 +25,7 @@ public class DataSender implements HttpHandler{
         arg0.sendResponseHeaders(200, response.length());
         OutputStream os = arg0.getResponseBody();
         os.write(response.toString().getBytes());
-        //os.close();
+        os.close();
 	}
 
 }

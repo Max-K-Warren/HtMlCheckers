@@ -29,16 +29,6 @@ public class Launcher {
 			server.createContext("/sendData/", new MoveReceiver(this));
 			server.setExecutor(null);
 			server.start();
-			/*
-			jSConnection = new ServerSocket(8080);
-			Socket pOneSocket = jSConnection.accept();
-			Socket pTwoSocket = jSConnection.accept();
-			readerOne = new PlayerConnection(pOneSocket, this, Tile.BLACK);
-			readerTwo = new PlayerConnection(pTwoSocket, this, Tile.WHITE);
-			this.updateData();
-			readerOne.start();
-			readerTwo.start();
-			*/
 		} catch (IOException e) {
 			System.out.println("Error opening socket + setup");
 			e.printStackTrace();
@@ -49,8 +39,12 @@ public class Launcher {
 
 	public int nextPlayer() {
 		if(nextPlayer==1 || nextPlayer==2) {
-			return nextPlayer;
+			System.out.println("Player " + nextPlayer + " Connecting");
+			int temp = nextPlayer;
+			nextPlayer += 1;
+			return temp;
 		}else{
+			System.out.println("Failed Connection");
 			return 0;
 		}
 	}

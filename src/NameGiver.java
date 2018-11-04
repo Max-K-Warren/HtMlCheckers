@@ -1,5 +1,5 @@
 import java.io.IOException;
-
+import java.io.OutputStream;
 
 import com.sun.net.httpserver.*;
 
@@ -13,7 +13,11 @@ public class NameGiver implements HttpHandler {
 	
 	@Override
 	public void handle(HttpExchange arg0) throws IOException {
-		arg0.sendResponseHeaders(master.nextPlayer(), -1);
+        String response = String.valueOf(master.nextPlayer());
+        arg0.sendResponseHeaders(200, response.length());
+        OutputStream os = arg0.getResponseBody();
+        os.write(response.toString().getBytes());
+        os.close();
 	}
 
 }
