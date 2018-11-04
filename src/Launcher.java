@@ -24,7 +24,11 @@ public class Launcher {
 		nextPlayer = 1;
 		try {
 			server = HttpServer.create(new InetSocketAddress(8080), 50);
-			//Add 3 contexts
+			server.createContext("/getName/", new NameGiver(this));
+			server.createContext("/getData/", new DataSender(this));
+			server.createContext("/sendData/", new MoveReceiver(this));
+			server.setExecutor(null);
+			server.start();
 			/*
 			jSConnection = new ServerSocket(8080);
 			Socket pOneSocket = jSConnection.accept();
@@ -53,12 +57,11 @@ public class Launcher {
 
 	public String getGrid(String playerName) {
 		//return JSONWriter(board.getplayershow());
-		return null;
+		return "hi";
 	}
 	
 	public void clicked(String player, String move) {
 		//Board.input
-		this.updateData();
 	}
 	
 	/*
