@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.util.Scanner;
 
 public class Board {
 	private Tile[][] board;
@@ -570,17 +571,26 @@ public class Board {
 		else return false;
 	}
 	
+	public Point inputPoint() {
+		Scanner s = new Scanner(System.in);
+		int x = s.nextInt();
+		int y = s.nextInt();
+		return new Point(x,y);
+	}
+	
 	public void play() {
 		boolean gameWon = false;
 		while (!gameWon) {
 			int[][] matrix = genPlayablePieces(int_board());
 			//send matrix
-			Point sourcePoint = new Point(5, 3); //change this when possible to recieve point from client
+			Point sourcePoint = inputPoint();
+			//Point sourcePoint = new Point(5, 3); //change this when possible to recieve point from client
 			matrix = unhilight(matrix);
 			matrix = generate_possible_moves(matrix, sourcePoint);
 			print(matrix);
 			System.out.println();
-			Point goalPoint = new Point(4,2); //change this when poss to receive point from client
+			Point goalPoint = inputPoint();
+			//Point goalPoint = new Point(4,2); //change this when poss to receive point from client
 			matrix = make_move(matrix, sourcePoint, goalPoint);
 			gameWon = checkWinCondition();
 			//panic
